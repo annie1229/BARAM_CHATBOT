@@ -1,0 +1,37 @@
+{
+  "name": "baram_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cheerio": "^1.0.0-rc.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-paginate": "^1.0.2",
+    "express-session": "^1.17.1",
+    "iconv-lite": "^0.6.2",
+    "ip": "^1.1.5",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.31",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.6",
+    "mongoose-auto-increment": "^5.0.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.6",
+    "nunjucks": "^3.2.2",
+    "passport": "^0.4.1",
+    "passport-kakao": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "request": "^2.88.2",
+    "urlencode": "^1.1.0"
+  }
+}
