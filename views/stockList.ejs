@@ -1,0 +1,25 @@
+<%- include('header') %>
+<div class="container">
+<table class="table table-hover text-center">
+  <thead>
+    <tr><th class="align-middle" colspan="4">물품 재고 현황입니다.</th></tr>
+    <tr>
+      <th class="align-middle" scope="col">#</th>
+      <th class="align-middle" scope="col">물품명</th>
+      <th class="align-middle" scope="col">대여중</th>
+      <th class="align-middle" scope="col">총 수량</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (var i = 0; i < goodsdata.length; i++) { %>
+    <tr>
+      <th class="align-middle" scope="row"><%=i+1%></th>
+      <td class="align-middle"><%=goodsdata[i].name%></td>
+      <td class="align-middle"><%=goodsdata[i].rent%></td>
+      <td class="align-middle"><%=goodsdata[i].total%></td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
+</div>
+<%- include('footer') %>

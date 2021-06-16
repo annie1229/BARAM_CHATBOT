@@ -1,0 +1,67 @@
+<%- include('header') %>
+<script>
+    window.onload = function(){
+        //if (location.href.indexOf('reloaded')==-1) location.replace(location.href+'?reloaded');
+        if (parent.location.href.indexOf('reloaded')==-1) parent.location.replace(parent.location.href+'?reloaded');
+    }
+</script>
+<div class="container">
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+              <th scope="col">물품명</th>
+              <th scope="col">대여중</th>
+              <th scope="col">총 수량</th>
+              <th scope="col">
+                <a href="/goods/add" class="btn btn-outline-primary" >추가</a>
+            </th>
+            </tr>
+        </thead>
+        <tbody>
+            <% goods.forEach( function(goods){ %>
+            <tr>
+                <td>
+                    <a href="/goods/detail/<%=goods.id%>">
+                        <%=goods.name%>
+                    </a>
+                </td>
+                <td>
+                    <%=goods.rent%>
+                </td>
+                <td>
+                    <%=goods.total%>
+                </td>
+                <td>
+                    <a href="/goods/delete/<%=goods.id%>" class="btn btn-outline-danger" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="<%= paginate.href(true) %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            <% pages.forEach(function(page){ %>
+            <li class="page-item">
+                <li class="<%= paginate.page == page.number ? 'active' : ''%>">
+                    <a class="page-link" href="<%= page.url %>"><%= page.number %></a>
+                </li>
+            </li>
+            <%})%>
+
+            <%if(paginate.hasNextPages(pageCount)){%>
+                <li>
+                    <a class="page-link" href="<%= paginate.href() %>">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            <%}%>
+            </ul>
+        </nav>
+    </div>
+</div>
+<%- include('footer') %>

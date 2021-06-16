@@ -1,0 +1,111 @@
+<%- include('header') %>
+<script>
+    window.onload = function(){
+        //if (location.href.indexOf('reloaded')==-1) location.replace(location.href+'?reloaded');
+        if (parent.location.href.indexOf('reloaded')==-1) parent.location.replace(parent.location.href+'?reloaded');
+    }
+</script>
+<div class="container">
+    <table class="table table-hover text-center">
+        <caption>카테고리 순서를 변경하려면 드래그해서 순서를 바꾼 후 새로고침 하세요.</caption>
+        <thead>
+            <tr>
+              <th scope="col">순서</th>
+              <th scope="col">카테고리명</th>
+              <th scope="col"></th>
+              <%if(mode != "add"){%>
+              <th scope="col">
+                  <a href="/category/add" class="btn btn-outline-primary" >추가</a>
+              </th>
+              <%}%>
+              <%if(mode == "add"){%>
+                <th></th>
+              <%}%>
+            </tr>
+          </thead>
+          <tbody">
+            <%var cnt = 1; %>
+            <%if(mode == "add"){%>
+                <!-- <%console.log("add들어왔따");%> -->
+            <form action="/category/add" method="post" class="form-horizontal">
+            <tr>
+                <th></th>
+                <th><input type="text" name="categoryname" class="form-control" value="<%=data.category%>" /></th>
+                <th>
+                    <button type="submit" class="btn btn-outline-primary" reload onclick="return confirm('추가하시겠습니까?')">추가</button>
+                </th>
+                <th></th>
+            </tr>
+            </form>
+            <%}%>
+            <% categoryData.forEach( function(category){ %>
+                
+                <% if((mode == "list")||(mode == "add")){%>
+                    <!-- <%//console.log("list들어왔따");%>
+                    <%//console.log(category);%> -->
+                    <tr id="id_<%= category.id %>">
+                        <th><%=cnt++%></th>
+                        <th><%=category.category%></th>
+                        <th><a href="/category/edit/<%=category.category%>" reload class="btn btn-outline-success">수정</a></th>
+                        <th><a href="/category/delete/<%=category.category%>" class="btn btn-outline-danger" onclick="return confirm('삭제하시겠습니까?')">삭제</a></th>
+                    </tr>
+                <% } %>
+                <% if(mode == "edit"){%>
+                    <!-- <%console.log("edit들어왔따");%> -->
+                    <% if(data.category != category.category){%>
+                        <!-- //<%console.log(category);%> -->
+                        <tr id="id_<%= category.id %>">
+                            <th><%=cnt++%></th>
+                            <th><%=category.category%></th>
+                            <th><a href="/category/edit/<%=category.category%>" reload class="btn btn-outline-success">수정</a></th>
+                            <th><a href="/category/delete/<%=category.category%>" class="btn btn-outline-danger" onclick="return confirm('삭제하시겠습니까?')">삭제</a></th>
+                        </tr>
+                    <% } %>
+                    <% if(data.category == category.category){%>
+                    <form action="/category/edit/<%=category.category%>" method="post" class="form-horizontal">
+                    <tr id="id_<%= category.id %>">
+                        <th><%=cnt++%></th>
+                        <th><input type="text" name="categoryname" class="form-control" value="<%=category.category%>" /></th>
+                        <th><button type="submit" class="btn btn-outline-success" onclick="return confirm('수정하시겠습니까?')">수정</button></th>
+                        <th><a href="/category/delete/<%=category.category%>" class="btn btn-outline-danger" onclick="return confirm('삭제하시겠습니까?')">삭제</a></th>
+                    </tr>
+                    </form>
+                    <% } %>
+                <% } %>
+            <% }); %>
+        </tbody>
+        </table>
+        <!-- JQUERY -->
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+        <!-- JQUERY UI -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+                crossorigin="anonymous"></script>
+
+        <style>
+            .product-highlight {
+                background: rgb(0, 0, 0);
+            }
+            tbody tr:hover {
+                cursor: move; 
+            }
+        </style>
+        <script>
+            $('tbody').sortable({
+              items: "tr",
+              placeholder: 'bg-warning', //product-highlight
+              update: function() {
+                const ids = $('tbody').sortable('serialize');
+                console.log('ids:'+ids);
+                const url = '/category/ordering';
+                $.post(url, ids, function(res) {
+                  console.log(res);
+                });
+              }
+            });
+        </script>
+    </div>
+</div>
+<%- include('footer') %>

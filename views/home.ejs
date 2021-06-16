@@ -1,0 +1,79 @@
+<%- include('header') %>
+
+        <div class="jumbotron jumbotron-fluid text-center align-center" style="background-color: #CBECEF !important;"
+          <div class="container">
+            <h3 class="display">BARAM 물품 관리 홈페이지에 오신것을 환영합니다!</h3>
+            <p class="lead">필요한 물품을 둘러보고 BARAM 카카오톡 플러스친구(@baramrobotics)를 통해 편하게 대여 신청하세요.</p>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row justify-content-center">
+            <% goods.forEach(function(goods){ %>
+              <a href="/goods/<%=goods.id%>"></a>
+            <div class="card" style="width: 16rem; height: 18rem;" onclick= "location.href='/goods/detail/<%=goods.id%>' ">
+              <%if(goods.thumbnail){%>
+                <img src="/uploads/<%=goods.thumbnail%>" class="card-img-top" style=" height: 12rem; object-fit: contain;"  >
+              <%}%>
+              <div class="card-body">
+                <h5 class=" card-title text-center" ><%=goods.name%></h5>
+                <p class=" card-subtitle mb-2 text-muted text-center" >재고 : <%=goods.total-goods.rent%></p>
+              </div>            
+              </a>
+            </div>          
+          <%});%>
+        </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+              <li class="page-item">
+                  <a class="page-link" href="<%= paginate.href(true) %>" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                  </a>
+              </li>
+          <% pages.forEach(function(page){ %>
+          <li class="page-item">
+              <li class="<%= paginate.page == page.number ? 'active' : ''%>">
+                  <a class="page-link" href="<%= page.url %>"><%= page.number %></a>
+              </li>
+          </li>
+          <%})%>
+
+          <%if(paginate.hasNextPages(pageCount)){%>
+              <li>
+                  <a class="page-link" href="<%= paginate.href() %>">
+                      <span aria-hidden="true">&raquo;</span>
+                  </a>
+              </li>
+          <%}%>
+          </ul>
+      </nav>
+        </div>
+      </div>
+  <style type="text/css">
+  .masonry-grid img { max-width: 260px; }
+  </style>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
+  <script type="text/javascript">
+      var $masonry_container = $('#masonry_container');
+      $masonry_container.imagesLoaded(function(){
+        $masonry_container.masonry({
+          itemSelector : '.masonry-grid',
+          columnWidth : 100
+        });
+      });
+  
+      $(document).ready(function(){       
+          $('#js-btn-wrap').click(function(){
+              $.ajax({
+                  url : "/",
+                  type : "POST",
+                  cache : false,
+                  dataType: 'json',
+                  //data: ,
+              })
+          });
+      });
+
+  </script>
+  
+<%- include('footer') %>

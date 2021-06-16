@@ -1,0 +1,70 @@
+<%- include('header') %>
+        <div class="container">
+          <div class="row justify-content-center">
+            <% categoryall.forEach(function(category){ %>
+              <a href="/category/<%=category.category%>"></a>
+            <div class="card" style="width: 16rem; height: 16rem;" onclick= "location.href='/goods/detail/<%=category.id%>' ">
+              <%if(category.thumbnail){%>
+                <img src="/uploads/<%=category.thumbnail%>" class="card-img-top" style=" height: 12rem; object-fit: contain;"  >
+              <%}%>
+              <div class="card-body">
+                <h5 class="text-center" ><%=category.name%></h5>
+              </div>            
+              </a>
+            </div>          
+          <%});%>
+        </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+              <li class="page-item">
+                  <a class="page-link" href="<%= paginate.href(true) %>" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                  </a>
+              </li>
+          <% pages.forEach(function(page){ %>
+          <li class="page-item">
+              <li class="<%= paginate.page == page.number ? 'active' : ''%>">
+                  <a class="page-link" href="<%= page.url %>"><%= page.number %></a>
+              </li>
+          </li>
+          <%})%>
+
+          <%if(paginate.hasNextPages(pageCount)){%>
+              <li>
+                  <a class="page-link" href="<%= paginate.href() %>">
+                      <span aria-hidden="true">&raquo;</span>
+                  </a>
+              </li>
+          <%}%>
+          </ul>
+      </nav>
+        </div>
+        
+  <style type="text/css">
+  .masonry-grid img { max-width: 260px; }
+  </style>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
+  <script type="text/javascript">
+      var $masonry_container = $('#masonry_container');
+      $masonry_container.imagesLoaded(function(){
+        $masonry_container.masonry({
+          itemSelector : '.masonry-grid',
+          columnWidth : 100
+        });
+      });
+  
+      $(document).ready(function(){       
+          $('#js-btn-wrap').click(function(){
+              $.ajax({
+                  url : "/",
+                  type : "POST",
+                  cache : false,
+                  dataType: 'json',
+                  //data: ,
+              })
+          });
+      });
+  </script>
+  
+<%- include('footer') %>

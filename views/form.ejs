@@ -1,0 +1,238 @@
+<%- include('header') %>
+<div class="container">
+            <% if (disagree){ %>
+            <div class="alert alert-danger" role="alert">
+              이미 등록된 물품입니다. 새로운 물품만 등록하실 수 있습니다.
+            </div>
+            <% } %>
+        <form action="" method="post" enctype="multipart/form-data" id="editForm"><!--form 재사용을 위해 action을 비워둬/ 폼 전송타입 enctype 추가-->
+             <table class="table table-bordered">
+
+                <tr>
+                    <th class="align-middle">물품명</th>
+                    <td class="align-middle"><input type="text" name="name" class="form-control" value="<%=goods.name%>" /></td>
+                </tr>
+                <tr>
+                    <th class="align-middle">카테고리</th>
+                    <td class="align-middle">
+                        <select class="form-control" name="category" >
+                            <!-- <%if(goods.category){%>
+                                <option value="<%=goods.category%>" selected disabled hidden><%=goods.category%></option>
+                            <%}%> -->
+                            <%if(!goods.category){%>
+                                <option value="" selected disabled hidden>==카테고리==</option>
+                            <%}%>
+                          <% for(var i = 0; i< categoryData.length; i++){ %>
+                            <%if(goods.category && (goods.category == categoryData[i].category)){%>
+                                <option value="<%=categoryData[i].category%>" selected><%=categoryData[i].category%></option>
+                            <% } %>
+                            <%if(!(goods.category && (goods.category == categoryData[i].category))){%>
+                                <option value="<%=categoryData[i].category%>"><%=categoryData[i].category%></option>
+                            <% } %>
+                          <% } %>
+                          <option disabled>새 카테고리를 추가하려면 카테고리 편집탭에서 카테고리를 추가하세요.</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="align-middle">총 수량</th>
+                    <td class="align-middle"><input type="number" name="total" class="form-control" value="<%=goods.total%>"/></td>
+                </tr>
+                <tr>
+                    <th class="align-middle">섬네일</th>
+                    <td class="align-middle">
+                        <div>
+                            <div class="file_box">
+                                <%if(goods.thumbnail){%>
+                                    <input class="upload_name" value="<%=goods.thumbnail%>" disabled="disabled">
+                                    <img class="upload-display img" src ='/uploads/<%=goods.thumbnail%>' />                                    
+                                    <label for="input_file">Select a thumbnail</label> 
+                                    <input type="file" name="thumbnail" id="input_file" class="file_hidden">
+                                <%}%>
+                                <%if(!goods.thumbnail){%>
+                                    <input class="upload_name" value="이미지 업로드" disabled="disabled">
+                                    <label for="input_file">Select a thumbnail</label> 
+                                    <input type="file" name="thumbnail" id="input_file" class="file_hidden">
+                                <%}%>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="align-middle">설명</th>
+                    <td class="align-middle">
+                        <textarea name="description" class="form-control" id="summernote"><%-goods.description%></textarea>
+                    </td>
+                </tr>
+
+
+            </table> 
+            <button class="btn btn-primary" >등록하기</button>
+        </form>
+        <style>.file_box{
+            position:relative;
+            margin-top:0px;
+            font-size:0;
+        }
+        
+        .file_box input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip:rect(0,0,0,0);
+            border: 0;
+        }
+        
+        .file_box label {
+            display: inline-block;
+            line-height: 0;
+            margin-left: 10px;
+            margin-top: 5px;
+            color: #999;
+            vertical-align: middle;
+            background-color: rgba(0, 183, 255, 0.781);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 400;
+            color: #5b0fbf;
+            text-align:center;
+            box-sizing:border-box;
+            background: rgba(0, 183, 255, 0.781);
+        }
+        
+        /* 파일 이름 */
+        .file_box .upload_name {
+            display: inline-block;
+            padding: 0 0 0 37px;
+            width: calc(100% - 150px);
+            height:40px;
+            line-height:40px;
+            vertical-align: middle;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            -webkit-appearance: none; /* 네이티브 외형 감추기 */
+            -moz-appearance: none;
+            appearance: none;
+            font-size: 14px;
+            font-weight: 300;
+            color: #a8a8a8;
+            box-sizing:border-box;
+        }
+        
+        /* 이미지 미리보기 */
+        .file_box .upload-display {
+            position: absolute;
+            left: 9px;
+            top: 9px;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .file_box .upload-display img {
+            display: block;
+            max-width: 100%;
+            width: 100% \10;
+            max-height:100%;;
+        }
+        </style>
+        <script>
+            /* 파일명 가져오기 start */
+	        var fileTarget = $('.file_box .file_hidden');
+            //if(goods.thumbnail) fileTarget = FileReader(C:\Users\Administrator\Downloads\BARAM_SERVER\uploads\products-1604767790440.jpeg);
+	        fileTarget.on('change', function(){
+                console.log('this'+this);
+	        	if(window.FileReader){
+	        		// 파일명 추출
+                    var filename = $(this)[0].files[0].name;
+                    console.log('filename'+filename);
+	        	} 
+	        	else {
+	        		// Old IE 파일명 추출
+                    var filename = $(this).val().split('/').pop().split('\\').pop();
+                    console.log('filename'+filename);
+	        	};
+            
+	        	$(this).siblings('.upload_name').val(filename);
+	        });
+	        /* 파일명 가져오기 end */
+        
+	        /* 파일 이미지 가져오기 start */
+	        var imgTarget = $('.file_box .file_hidden');
+        
+	        imgTarget.on('change', function(){
+	        	var parent = $(this).parent();
+	        	parent.children('.upload-display').remove();
+            
+	        	if(window.FileReader){
+	        		//image 파일인지 검사
+	        		if (!$(this)[0].files[0].type.match(/image\//)) return;
+                
+	        		var reader = new FileReader();
+	        		reader.onload = function(e){
+	        			var src = e.target.result;
+	        			console.log(e);
+	        			console.log(e.target);
+	        			parent.prepend('<div class="upload-display"><img src="'+src+'" class="upload-thumb"></div>');
+	        		}
+	        		reader.readAsDataURL($(this)[0].files[0]);
+	        	}
+	        	else {
+	        		$(this)[0].select();
+	        		$(this)[0].blur();
+	        		var imgSrc = document.selection.createRange().text;
+	        		parent.prepend('<div class="upload-display"><img class="upload-thumb"></div>');
+                
+	        		var img = $(this).siblings('.upload-display').find('img');
+	        		img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";
+	        	}
+	        });
+	        /* 파일 이미지 가져오기 end */
+                </script>
+                <script>
+                $(document).ready(function(){
+                
+                    $('#summernote').summernote({
+                        lang: 'ko-KR',
+                        height: 300,
+                        callback: {
+                            onImageUpload: function(files){
+                                sendFile(files[0]);
+                            }
+                        },
+            //             toolbar: [
+            //             // [groupName, [list of button]]
+            //             ['style', ['bold', 'italic', 'underline', 'clear']],
+            //             ['font', ['strikethrough', 'superscript', 'subscript']],
+            //             ['fontsize', ['fontsize']],
+            //             ['color', ['color']],
+            //             ['para', ['ul', 'ol', 'paragraph']],
+            //             ['height', ['height']]
+            //          ]
+                    });
+                
+                    $('#editForm').submit(function(){
+                        $('input[name=files]').remove();//input이 이미 있으면 지운다. input 요청이 하나만 되게<-summernote 섬네일 에러 처리
+                    });
+                
+                    function sendFile(file, editor, welEditable){
+                        data = new FormData();
+                        data.append("thumbnail",files);
+                        $.ajax({
+                            data: data,
+                            type: "POST",
+                            url: '/products/ajax_summernote/',
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function(url) {
+                                $('#summernote').summernote("insertImage", url);
+                            }
+                        });
+                    }
+                });
+        </script>
+</div>
+<%- include('footer') %>

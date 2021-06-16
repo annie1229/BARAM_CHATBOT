@@ -1,0 +1,36 @@
+<%- include('header') %>
+<div class="container">
+<table class="table table-hover text-center">
+  <thead>
+    <% if(returndata.length != 0){ %>
+        <tr><th class="align-middle" colspan="6">반납 신청 내역입니다.</th></tr>
+    <% } %>
+    <% if(returndata.length == 0){ %>
+        <th class="align-middle" colspan="6">물품 반납 신청이 없습니다.</th>
+    <% } %>
+    <tr>
+      <th class="align-middle" scope="col">#</th>
+      <th class="align-middle" scope="col">이름</th>
+      <th class="align-middle" scope="col">물품명</th>
+      <th class="align-middle" scope="col">수량</th>
+      <th class="align-middle" scope="col">대여 날짜</th>
+      <th class="align-middle" scope="col">반납 확인</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (var i = 0; i < returndata.length; i++) { %>
+        <% var date = returndata[i].rentdate.split(' ');%>
+        <% date = date[0];%>
+    <tr>
+      <th class="align-middle" scope="row"><%=i+1%></th>
+      <td class="align-middle"><%=returndata[i].username%></td>
+      <td class="align-middle"><%=returndata[i].goodsname%></td>
+      <td class="align-middle"><%=returndata[i].quantity%></td>
+      <td class="align-middle"><%=date%></td>
+      <td class="align-middle"><a href="/confirmReturn/<%=i%>" class="btn btn-outline-danger" onclick="return confirm('반납 완료되었습니까?')">확인</a></td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
+</div>
+<%- include('footer') %>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- include libraries(jQuery, bootstrap) --> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.11/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/bootstrap-filestyle.min.js"> </script>
+    <!--폰트어섬추가 -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- include summernote css/js--> 
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet"> 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+    <!-- 한글관련 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.6/lang/summernote-ko-KR.min.js"></script>
+    <title>BARAM 물품관리 사이트</title>
+  </head>
+  <body>
+    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #FFF !important;">
+        <h1 class="navbar-brand align-middle" onclick="location.href='/' ">BARAM</h1>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            
+              <% for(var i=0; i < categoryData.length; i++){ %>
+                <li class="nav-item dropdown align-middle">
+                <a class="nav-link dropdown-toggle align-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%=categoryData[i].category%>
+                </a>
+                <div class="dropdown-menu align-middle" aria-labelledby="navbarDropdown">
+                <% for(var cnt=0; cnt < pageData.length; cnt++){%>
+                  <% //console.log('pageData수: '+ pageData.length); %>
+                <% if(pageData[cnt].category == categoryData[i].category){%>
+                  <a class="dropdown-item" href="/goods/detail/<%=pageData[cnt].id%>"><%=pageData[cnt].name%></a>
+                <% } %>
+                <% } %>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/categoryList/<%=categoryData[i].category%>"><%=categoryData[i].category%> 전체 보기..</a>
+              </div>
+            </li>
+            <% }%>
+          
+          </ul>
+          <form action="/finding" method="get" class="form-inline my-2 my-lg-0" style="margin :20px;">
+            <input class="form-control mr-sm-6" type="search" name="q" placeholder="부품명 검색" aria-label="부품명 검색">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+          </form>
+          <% if (loginTF){ %>
+          <div class="btn-group">
+            <%// console.log('관리자 메뉴 클릭') %>
+            <button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              관리자 메뉴
+            </button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item d-flex justify-content-between align-items-center" type="button" onclick= "location.href='/goods' ">물품 페이지 관리</button>
+              <button class="dropdown-item d-flex justify-content-between align-items-center" type="button" onclick= "location.href='/category' ">물품 카테고리 편집</button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item d-flex justify-content-between align-items-center" type="button" onclick= "location.href='/rentList' ">대여 기록
+                <span class="badge badge-primary badge-pill"><%= rentCount %></span></button>
+              <button class="dropdown-item d-flex justify-content-between align-items-center" type="button" onclick= "location.href='/returnList' ">반납 신청
+                <span class="badge badge-primary badge-pill"><%= returnCount %></span></button>
+              <button class="dropdown-item d-flex justify-content-between align-items-center" type="button" onclick= "location.href='/stockList' ">물품 재고 확인</button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item d-flex justify-content-between align-items-center" type="button" onclick= "location.href='/logout' ">로그아웃</button>
+            </div>
+          </div>
+          <% } %>
+          <% if(!loginTF){ %>
+            <button type="button" onclick="location.href='/login' " class="btn btn-outline-dark">관리자 로그인</button>
+          <% } %>
+      </nav>
+    </div>
